@@ -51,7 +51,9 @@ cd src/mesa
 
 * Lav et "Little Endian MIPS project"
 
+----
 .cmake/create_cmake_project.rb mipsel
+----
 
 * Konfiguration af Jaguar2 i CMAKE projektet
 Jaguar2 har produktnavnet vsc7468
@@ -84,34 +86,44 @@ fil, som indeholder flere ting:
 Denne fil skal nu fra PCen over på Jaguar2, og det gør vi i bootloaderen
 ved at:
 
-* På PCen lægger vi MFI filen i en bestemt folder som vores WebServer på
-* PCen kender:
+På PCen lægger vi MFI filen i en bestemt folder som vores WebServer på
+PCen kender:
 
 ----
 cp mesa/demo/mfi_vsc7468_pcnt29_ts.mfi /tftpboot/
 ----
 
-* Check dette med browseren
+Check dette med browseren
 * Start Chrome
-* Vælg adressen http://10.205.21.64/
+* Vælg adressen http://localhost
 * Check at der er en mfi_vsc7468_pcnt29_ts.mfi fil
 
-* Skift til termhub terminalen
-* Tast ? så du kan se bootloaderens menu
-* Hent Jaguar2s firmware over i bootloaderens memory:
+Skift til termhub terminalen
+Tast ? så du kan se bootloaderens menu
+
+----
+?
+----
+
+Hent Jaguar2s firmware over i bootloaderens memory:
 
 ----
 dhcp mfi_vsc7468_pcnt29_ts.mfi
 ----
 
-* Start den nye firmware
+Start den nye firmware
 
 ----
 bootmfi
 ----
 
-* Login i linux med brugernavnet "root"
-* Start mesa-demo programmet
+Login i linux med brugernavnet "root"
+
+----
+root
+----
+
+Start mesa-demo programmet
 
 ----
 mesa-demo
@@ -134,6 +146,7 @@ Noter den port som der er trafik på ned, og genstart i bootloaderen.
 ----
 reboot
 ----
+
 Gentag processen fra før men denne gang starter vi mesa-demo applikationen med
 den port som vi så trafik på (x).
 ----
