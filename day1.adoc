@@ -155,7 +155,7 @@ stykker.  Find det der hedder eth_mgmt.
 Check dets IP adresse.  Den ser sådan ud:
 
 ----
-net 10.99.y.1/zz brd 10.99.1.255 scope global eth_mgmt
+net 10.99.y.1/zz brd 10.99.y.255 scope global eth_mgmt
 ----
 
 Noter 10.99.y.1/zz delen ned.  Den skal vi bruge.
@@ -164,8 +164,11 @@ I termhub terminalen giver vi nu en matchende adresse til Jaguar2 switchens
 netværksinterface.
 
 ----
-ip 10.99.y.2/zz
+ip addr add 10.99.y.2/zz dev vtss.port.x
 ----
+
+Nu har netværksinterfacet vtss.port.x som er forbundet til front port x fået en
+IP adresse, så den kan sende og modtage IP pakker.
 
 Pointen er at PCens adresse slutter på .1 og switchens på .2, så de har
 altså forskellige adresser men er på samme netværk, så de har mulighed for at
@@ -175,6 +178,14 @@ Send 5 ping pakker fra Jaguar 2 til PCen
 
 ----
 ping -c 5 10.99.y.1
+----
+
+Check at dette gik godt.  Der skulle gerne stå sådan her (0% packet loss)
+
+----
+--- 10.99.y.1 ping statistics ---
+5 packets transmitted, 5 packets received, 0% packet loss
+round-trip min/avg/max = 1.094/1.249/1.863 ms
 ----
 
 Send 5 ping pakker fra PCen til Jaguar2 switchen
@@ -192,9 +203,10 @@ Send ping pakker i en lind strøm fre Jaguar2 til PCen.
 ping -c 5 10.99.y.1
 ----
 
-Hvad hedder disse pakker i WireShark, og hvad indeholder de?
-Hvad er MAC adresserne på de to devices?
-
+1. Hvad hedder disse pakker i WireShark?
+1. Hvad indeholder de?
+1. Hvad er MAC adresserne på de to devices?
+1. Hvilke andre pakker kan du se på dette netværk?
 
 
 
