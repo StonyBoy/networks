@@ -1,14 +1,14 @@
 = Ethernet
 
-== Hvad Ethernet
-https://www.youtube.com/watch?v=5u52wbqBgEY
-https://www.youtube.com/watch?v=HLziLmaYsO0
+== Hvad Ethernet?
+1. https://www.youtube.com/watch?v=5u52wbqBgEY
+1. https://www.youtube.com/watch?v=HLziLmaYsO0
 
-== Hvad er Internet Protokollen
+== Hvad er Internet Protokollen?
 https://www.youtube.com/watch?v=mm-NHrLtRWI
 
 
-== Opgave for dagen
+== Målet for idag
 
 Forbind en PC til en Microchip Jaguar2 switch og download firmware til switchen,
 så den kan starte Linux op.
@@ -203,26 +203,10 @@ Send ping pakker i en lind strøm fre Jaguar2 til PCen.
 ping -c 5 10.99.y.1
 ----
 
+== Opgaver
+
 1. Hvad hedder disse pakker i WireShark?
 1. Hvad indeholder de?
 1. Hvad er MAC adresserne på de to devices?
 1. Hvilke andre pakker kan du se på dette netværk?
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
