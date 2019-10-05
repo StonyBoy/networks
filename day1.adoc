@@ -155,7 +155,7 @@ stykker.  Find det der hedder eth_mgmt.
 Check dets IP adresse.  Den ser sådan ud:
 
 ----
-net 10.99.y.1/zz brd 10.99.y.255 scope global eth_mgmt
+inet 10.99.y.1/zz brd 10.99.y.255 scope global eth_mgmt
 ----
 
 Noter 10.99.y.1/zz delen ned.  Den skal vi bruge.
@@ -180,7 +180,7 @@ Send 5 ping pakker fra Jaguar 2 til PCen
 ping -c 5 10.99.y.1
 ----
 
-Check at dette gik godt.  Der skulle gerne stå sådan her (0% packet loss)
+Check at dette gik godt.  Der skulle gerne stå sådan her: "0% packet loss"
 
 ----
 --- 10.99.y.1 ping statistics ---
@@ -194,13 +194,13 @@ Send 5 ping pakker fra PCen til Jaguar2 switchen
 ping -c 5 10.99.y.2
 ----
 
-Prøv nu at starte WireShark programmet på PCen og lyt på eth_mgmt
+Prøv nu at starte *WireShark* programmet på PCen og lyt på *eth_mgmt*
 netværksinterfacet.
 
-Send ping pakker i en lind strøm fre Jaguar2 til PCen.
+Send ping pakker i en lind strøm fra Jaguar2 til PCen.
 
 ----
-ping -c 5 10.99.y.1
+ping 10.99.y.1
 ----
 
 == Opgaver
