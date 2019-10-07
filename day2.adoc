@@ -1,0 +1,211 @@
+= Netværks test
+
+== Hvad er TCP og UDP?
+1. https://www.youtube.com/watch?v=uwoD5YsGACg
+1. https://www.youtube.com/watch?v=FfvUxw8DHb0
+1. https://www.youtube.com/watch?v=1LYqtkgtSPU
+
+== Netværkshastighed og test
+1. https://www.youtube.com/watch?v=WfoaM-Df1d0
+1. https://www.youtube.com/watch?v=rRUC_x42-fQ
+
+== Målet for idag
+
+Udgangspunktet er den opstilling du brugte igår, men nu skal du prøve at sende
+store datamænger frem og tilbage, og undersøge:
+
+1. Hvilke programmer kan bruge til at teste et netværk?
+1. Hvordan sender man data i den ene og anden retning?
+1. Hvormeget kan man sende i hver retning før der kommer fejl?
+1. Prøve at lave fejl på et netværk
+1. Hvad kan man ændre i testen for at undgå fejl?
+
+== Internet hastighed
+Prøv at teste hastigheden på din PC.  Du kan f.eks. bruge Ookla SpeedTest: https://www.speedtest.net/
+
+Du kan også prøve dette på din MacBook eller iPhone.
+
+1. Hvilket device har den hurtigste download hastighed?
+1. Hvilket device har den hurtigste upload hastighed?
+
+== Start Jaguar2 firmwaren
+
+Start en terminal på PCen (Terminator)
+
+Start termhub programmet inde i terminalen:
+
+----
+termhub -d /dev/ttyUSB0
+----
+
+Så skal du hente firmwaren som du byggede igår:
+
+----
+dhcp mfi_vsc7468_pcnt29_ts.mfi
+----
+
+Og starte den op:
+
+----
+bootmfi
+----
+
+Login med "root" og start mesa-demo på den port hvor du har forbundet til din
+PC.
+
+----
+mesa-demo -p x
+----
+hvor x er et port nummer.
+Herefter skal du give vtss.port.x interfacet en IP adresse som du prøvede det
+igår (https://github.com/StonyBoy/networks/blob/master/day1.adoc).
+
+== Prøv at køre iPerf programmet
+
+Start en terminal på PC og start en iPerf server:
+
+----
+iperf -s -i 1
+----
+
+Nu står serveren klar til at modtage forbindelser fra iPerf klienter.
+
+Skift nu til Jaguar2 terminalen og start en iPerf klient der forbinder til din
+server:
+
+----
+iperf -c 10.99.y.1 -i 1
+----
+
+Hvad!
+
+Det virker ikke.  Der er ikke noget iperf program på din Jaguar2!
+
+== iPerf til Jaguar2
+
+Så nu er opgaven at addere iPerf programmet til dit Jaguar2s
+filsystem.
+
+I din Download folder ligger der en version af iPerf som er bygget til den MIPS
+CPU som er i Jaguar2.
+
+Du kan checke dette: Skift den terminal du har på din PC, og gå til Download
+folderen:
+
+----
+cd ~/Downloads
+----
+
+Prøv at køre iperf programmet:
+
+----
+./iperf
+----
+
+Nej det kan man ikke for det er bygget til en anden CPU end den som er i en PC
+(det er en Intel CPU, lige som i en MacBook).
+
+Man kan også se dette med programmet "file":
+
+----
+file iperf
+----
+
+Nu kan man se et dette program er bygget til en MIPS CPU.
+
+Du skal du addere iperf til dit Jaguar2 root filesystem.
+
+Først skal du skifte til den folder hvor mesa demo programmet bliver bygget:
+
+----
+cd ~/src/mesa/mesa/demo
+----
+
+Så starter du mousepad editoren på CMakeLists.txt filen (som beskriver hvad der
+skal bygges til mesa demo):
+
+----
+mousepad CMakeLists.txt &
+----
+Det sidste "&" tegn gør at programmet bliver startet i baggrunden og at
+terminalen kører videre uden at vente.
+
+Nu skal du finde det rigtige sted at tilføje iperf:
+
+1. Led efter et afsnit der begynder med "macro(MFI_TARGET)"
+1. Find den linie der starter med "COMMAND cp ${CMAKE_BINARY_DIR}"
+1. Tilføj en ny linie herefter:
+1. "COMMAND cp ~/Downloads/iperf install_${MFI_NAME}/usr/bin"
+
+Luk editoren igen og gå til build-mipsel folderen.
+
+----
+cd ~/src/mesa/build-mipsel
+----
+
+1. Start et nyt build af Jaguar2 MFI filen.
+1. Kopier filen til WebServeren
+1. Skift til Jaguar2 terminalen
+1. Hent firmwaren med dhcp
+1. Start firmwaren med bootmfi
+1. Login i linux
+
+== Test med iPerf
+
+Nu kan du prøve om du kan starte iperf klienten:
+
+----
+iperf -c 10.99.y.1 -i 1 -b 1M -t 30
+----
+
+1. Hvad betyder "-c 10.99.y.1"?
+1. Hvad betyder "-i 1"?
+1. Hvad betyder "-b 1M"?
+1. Hvad betyder "-t 30"?
+1. Hvilken protocol sender iperf klienten data med?
+1. Hvilken retning bliver data sendt?
+
+Så langt så godt.
+
+Prøv at sende med den anden mulige protocol.
+Prøv at øge hastigheden.
+
+1. Hvor hurtigt kan du sende med iperf før der kommer fejl i data?
+1. Hvis der højst må være 1% fejl, hvor hurtigt kan du maksimalt sende?
+1. Hvad er det højeste du kan sende med, med de 2 protokoller?
+
+Stop serveren på din PC. Det gør du med:
+
+----
+CTRL+C
+----
+
+Prøv nu at starte en iperf server på Jaguar2 og en klient på din PC.
+
+1. Hvor hurtigt kan du maksimalt sende med de to protokoller (max 1% fejl).
+1. Er dette bedre eller værre end den højeste hastighed i den anden retning?
+
+=== Fejl i data
+
+Nu skal vi prøve at genere trafikken lidt.
+
+Mens du sender data så træk stikket ud, og sæt det i igen efter ca. 5 sekunder.
+
+1. Hvad sker der med resultatet?
+1. Er der forskel på resultatet når du bruger de to forskellige protokoller.
+
+== Hvilke data bliver der sendt
+
+Så skal vi også lige se på hvordan data ser ud.
+
+Start WireShark på PCen og vælg det interface som du tester på.
+Tryk på hajfinnen for at starte målingen.
+Start iperf klienten på PCen.
+
+1. Hvilke data bliver der sendt?
+1. Hvor store er de pakker der bliver sendt?
+1. Sammenlign de upload og download hastigheder du har målt med dem du målte på
+   PC, MacBook og iPhone.  Hvad er hugtigst?
+1. Check hvad upload/download hastighederne er på FireAnt.
+
+
